@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Portfólio de Gabriel Mosquer: ciência de dados, IA aplicada e automação, com demos interativas de cada projeto.">
+<meta property="og:title" content="Gabriel Mosquer">
+<meta property="og:description" content="Ciência de dados, IA aplicada e automação, com demos interativas de cada projeto.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='6' fill='%23B3246B'/%3E%3Ccircle cx='23' cy='9' r='6' fill='%230A7C71'/%3E%3Ccircle cx='9' cy='23' r='6' fill='%23A86200'/%3E%3Ccircle cx='23' cy='23' r='6' fill='%232D4FCC'/%3E%3C/svg%3E">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Gabriel Mosquer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Caveat:wght@600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: cada projeto é um capítulo com cor própria: título, ficha, história curta e a demo como ilustração central. */
+:root{
+  --bg:#FAF9FD;--ink:#1B1A2E;--muted:#5F5D78;--line:#DCD9E8;--panel:#FFFFFF;--sunk:#F0EEF7;--on:#FFFFFF;
+  --q:#B3246B;--x:#9A4316;--shade:rgba(10,8,20,.72);--photoink:#FFFFFF;--t:#0A7C71;--d:#A86200;--r:#2D4FCC;--c:var(--r);
+  --disp:"Syne","Trebuchet MS",sans-serif;--text:"Newsreader",Georgia,serif;--hand:"Caveat","Segoe Print",cursive;--mono:"DM Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13121D;--ink:#EDEBF7;--muted:#A6A3C0;--line:#302E45;--panel:#1B1A29;--sunk:#0E0D17;--on:#13121D;--q:#F37BB8;--x:#F2A36F;--t:#52D3C2;--d:#F0B44A;--r:#8FA5FF;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13121D;--ink:#EDEBF7;--muted:#A6A3C0;--line:#302E45;--panel:#1B1A29;--sunk:#0E0D17;--on:#13121D;--q:#F37BB8;--x:#F2A36F;--t:#52D3C2;--d:#F0B44A;--r:#8FA5FF;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 19px/1.6 var(--text);margin:0}
+.wrap{max-width:1120px;margin:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--c)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+h1,h2,h3{font-family:var(--disp);font-weight:800;text-wrap:balance;margin:0;letter-spacing:-.02em}
+p{margin:0}
+button{font:600 14px var(--disp);cursor:pointer}
+
+/* Navegação */
+.nav{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-block:20px;font:600 15px var(--disp)}
+.nav div{display:flex;gap:8px 20px;align-items:center;flex-wrap:wrap;min-width:0}
+@media(max-width:480px){.nav div{gap:8px 14px;font-size:14px}}
+.nav a{color:var(--ink);text-decoration:none}
+.nav a:hover{color:var(--c)}
+.ghost{background:none;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+.ghost:hover{border-color:var(--c);color:var(--c)}
+
+/* Abertura */
+.hero{padding-block:40px 64px}
+.hero h1{font-size:clamp(2.5rem,7.4vw,5.6rem);line-height:1;max-width:13ch}
+.hero .lead{font-size:1.25rem;max-width:56ch;color:var(--muted);margin-top:24px}
+.field{margin-top:40px}
+.field canvas{display:block;width:100%}
+.fieldbar{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px;font:400 13px var(--mono);color:var(--muted)}
+.legend{list-style:none;margin:28px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.legend a{display:grid;gap:2px;text-decoration:none;color:var(--ink);border-top:3px solid var(--c);padding-top:10px}
+.legend b{font:800 2.2rem/1 var(--disp);color:var(--c);font-variant-numeric:tabular-nums}
+.legend span{color:var(--muted);font-size:1rem;line-height:1.3}
+.legend em{font:600 15px var(--disp);font-style:normal;margin-top:6px}
+.legend a:hover em{color:var(--c)}
+
+/* Capítulos */
+.ch{background:color-mix(in srgb,var(--c) 6%,var(--bg));padding-block:80px}
+.kick{font:500 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.ch h2{font-size:clamp(2.4rem,6.4vw,4.6rem);line-height:1;margin-top:10px}
+.hook{font-style:italic;font-size:clamp(1.25rem,2.4vw,1.6rem);line-height:1.35;max-width:34ch;margin-top:16px}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin:40px 0 0}
+.meta div{border-top:1px solid var(--c);padding-top:10px;min-width:0}
+.meta dt{font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.meta dd{margin:4px 0 0;font-size:1rem;line-height:1.4}
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:56px;margin-top:48px}
+.story{display:grid;gap:18px;max-width:62ch;align-content:start}
+.why{align-self:start;min-width:0}
+.why h3{font:600 1.7rem/1.1 var(--hand);letter-spacing:0;color:var(--c)}
+.why p{font-size:1rem;color:var(--muted);margin-top:8px}
+.code{margin-top:28px;font-size:1rem;color:var(--muted)}
+.code a{font:600 15px var(--disp)}
+
+/* Bancada da demo */
+.bench{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-top:48px;overflow:hidden}
+.benchhead{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.status{font:400 13px var(--mono);color:var(--muted);min-width:0}
+.rail{display:flex;list-style:none;margin:0;padding:0;border-bottom:1px solid var(--line);overflow-x:auto}
+.rail li{flex:1 0 auto;padding:9px 14px;font:400 12.5px var(--mono);color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.rail li.on{color:var(--c);border-color:var(--c)}
+.rail li.done{color:var(--ink)}
+.stage{padding:20px;display:grid;gap:20px;min-width:0}
+.note{font:400 12.5px/1.5 var(--mono);color:var(--muted)}
+.hand{font:600 22px/1.1 var(--hand);color:var(--c)}
+.pill{display:inline-block;padding:1px 8px;border-radius:4px;font:400 12px var(--mono);background:var(--sunk);color:var(--muted)}
+.pill.hit{background:var(--c);color:var(--on)}
+
+/* QuimicAI */
+.qgrid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px}
+.qgrid>div{min-width:0;display:grid;gap:16px;align-content:start}
+#spec svg{display:block;width:100%;height:230px}
+#spec .ax{stroke:var(--line)}
+#spec .tk{fill:var(--muted);font:400 11px var(--mono)}
+#spec .nz{stroke:var(--line);stroke-width:1.5}
+#spec .pk{cursor:pointer}
+#spec .pk line{stroke:var(--muted);stroke-width:2.5}
+#spec .pk circle{fill:var(--muted)}
+#spec .pk text{fill:var(--muted);font:400 11.5px var(--mono)}
+#spec .pk.en line{stroke:var(--ink)}
+#spec .pk.en circle,#spec .pk.en text{fill:var(--ink)}
+#spec .pk.sel line,#spec .pk.bad line{stroke:var(--c)}
+#spec .pk.sel circle,#spec .pk.sel text,#spec .pk.bad circle,#spec .pk.bad text{fill:var(--c)}
+#spec .pk.sel line{stroke-width:4}
+#spec .arw{fill:none;stroke:var(--c);stroke-width:1.5}
+#spec text.hand{fill:var(--c)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font:400 13px var(--mono);font-variant-numeric:tabular-nums}
+th{text-align:left;font-weight:500;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody tr{cursor:pointer}
+tbody tr.sel td{background:var(--sunk)}
+.sources{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:400 12px var(--mono);color:var(--muted)}
+.sources b{font-weight:400;padding:2px 8px;border:1px solid var(--line);border-radius:4px}
+.sources b.on{background:var(--c);color:var(--on);border-color:var(--c)}
+.term{background:var(--sunk);border-radius:6px;padding:12px;font:400 12.5px/1.55 var(--mono);min-height:112px;white-space:pre-wrap;overflow-wrap:anywhere}
+.ask{display:grid;gap:10px}
+.ask h3{font-size:1rem;letter-spacing:0}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font:400 15px/1.3 var(--text);padding:6px 10px;border-radius:6px;background:none;border:1px solid var(--line);color:var(--ink);text-align:left}
+.chip:hover{border-color:var(--c)}
+.chip[aria-pressed="true"]{border-color:var(--c);color:var(--c)}
+.answer{font-size:1rem;line-height:1.5;min-height:100px;padding:12px;background:var(--sunk);border-radius:6px}
+
+/* Frota de telefonia: texto que rola ao lado de um gráfico fixo */
+.scrolly{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;margin-top:24px}
+.steps{min-width:0}
+.step{min-height:74vh;display:flex;flex-direction:column;justify-content:center;gap:10px;opacity:.35;transition:opacity .3s;cursor:pointer}
+.step.on{opacity:1}
+.step h3{font-size:1.6rem;line-height:1.1}
+.fig{position:sticky;top:calc(env(safe-area-inset-top,0px) + 10vh);align-self:start;min-width:0;margin-top:0}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);padding:4px 8px;font:400 12.5px var(--mono)}
+.tabs button[aria-pressed="true"]{color:var(--c);border-color:var(--c)}
+#tsvg{display:block;width:100%;height:auto}
+#tsvg circle{fill:var(--muted);fill-opacity:.55;transition:transform .9s cubic-bezier(.3,.8,.3,1),fill .5s,fill-opacity .5s}
+#tsvg.s2 circle,#tsvg.s3 circle{fill-opacity:.9}
+#tsvg.s2 .k1,#tsvg.s3 .k1{fill:var(--d)}
+#tsvg.s2 .k2,#tsvg.s3 .k2{fill:var(--t)}
+#tsvg.s2 .k3,#tsvg.s3 .k3{fill:var(--q)}
+#tsvg g{opacity:0;transition:opacity .5s}
+#tsvg.s1 .a1,#tsvg.s2 .a1,#tsvg.s2 .a2,#tsvg.s3 .a3{opacity:1}
+#tsvg .a1 text,#tsvg .a3 text{fill:var(--muted);font:400 13px var(--mono)}
+#tsvg .a1 line,#tsvg .a3 line{stroke:var(--line)}
+#tsvg .a2 text{font:600 21px var(--hand)}
+.figfoot{min-height:112px;display:grid;gap:10px;align-content:start}
+.sim label{display:flex;justify-content:space-between;font:600 14px var(--disp)}
+.sim input{width:100%;accent-color:var(--c)}
+.count{display:flex;gap:28px;flex-wrap:wrap;font-size:.95rem;line-height:1.3;color:var(--muted)}
+.count b{display:block;font:800 1.6rem/1.1 var(--disp);color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* Diário Oficial */
+.dgrid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px}
+.dgrid>div{min-width:0;display:grid;gap:14px;align-content:start}
+.week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.week button{display:grid;gap:4px;justify-items:center;padding:8px 4px;background:none;border:1px solid var(--line);border-radius:6px;color:var(--ink)}
+.week button[aria-pressed="true"]{border-color:var(--c);background:var(--sunk)}
+.week i{font:400 12px var(--mono);font-style:normal;color:var(--muted)}
+.week i.hit{color:var(--c);font-weight:500}
+.pub{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:1rem;line-height:1.35}
+.pub code{font:400 12px var(--mono);color:var(--muted)}
+.pub.miss{opacity:.5}
+.pub.hit{border-color:var(--c)}
+mark{background:none;color:var(--c);font-weight:600}
+.terms{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.terms span{font:400 12.5px var(--mono);color:var(--muted)}
+.alert{background:var(--sunk);border-radius:6px;padding:14px;min-height:150px;display:grid;gap:8px;align-content:start;font-size:1rem;line-height:1.4}
+.alert strong{font:600 15px var(--disp)}
+.alert ul{margin:0;padding-left:18px}
+
+/* Renomeador */
+.pipe{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.pipe div{border:1px solid var(--line);border-radius:6px;padding:10px;min-width:0}
+.pipe div.on{border-color:var(--c);background:var(--sunk)}
+.pipe span{display:block;font:400 12px var(--mono);color:var(--muted)}
+.pipe b{display:block;font:500 16px var(--mono);margin-top:2px;overflow-wrap:anywhere;min-height:1.5em}
+#rgrid{display:block;width:100%}
+.try{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.try label{font:600 14px var(--disp)}
+.try input{font:500 15px var(--mono);padding:7px 10px;width:9ch;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.solid{background:var(--c);color:var(--on);border:0;border-radius:6px;padding:8px 12px}
+.try output{font:400 14px var(--mono)}
+
+/* Bastidores do assistente */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:40px;list-style:none;padding:0}
+.flow li{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;position:relative;display:grid;gap:6px;align-content:start;min-width:0}
+.flow li:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--c);font:600 16px var(--mono)}
+.flow b{font:600 15px/1.2 var(--disp)}
+.flow span{font-size:.92rem;line-height:1.4;color:var(--muted)}
+.flow code{font:400 12px var(--mono);color:var(--c)}
+.rules{margin-top:56px}
+.rules>p{font:400 12.5px var(--mono);color:var(--muted)}
+.rule{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px;padding:20px 0;border-bottom:1px solid var(--line);align-items:start}
+.rule blockquote{margin:0;font:400 14px/1.6 var(--mono);background:var(--panel);border-left:3px solid var(--c);padding:12px 14px;border-radius:0 6px 6px 0;overflow-wrap:anywhere}
+.rule p{font-size:1rem;line-height:1.5}
+.full{margin-top:28px}
+.full summary{cursor:pointer;font:600 15px var(--disp);color:var(--c)}
+.full pre{margin:14px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px;font:400 13px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:440px;overflow:auto}
+
+/* Selos de status */
+.kickrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:7px;font:500 12px var(--mono);padding:3px 10px;border-radius:999px;border:1px solid var(--c);color:var(--c)}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+.badge.live::before{animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--c) 60%,transparent)}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+
+/* Mais ferramentas */
+.tools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:40px}
+.tool{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px;display:grid;gap:12px;align-content:start;min-width:0}
+.tool h3{font-size:1.5rem;line-height:1.1}
+.tool .big{font:800 2.6rem/1 var(--disp);font-variant-numeric:tabular-nums}
+.tool .big small{display:block;font:400 1rem/1.3 var(--text);color:var(--muted);margin-top:4px}
+.tool p{font-size:1rem;line-height:1.5}
+.tool .stack{font:400 12.5px var(--mono);color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+
+/* Intercâmbio */
+.album{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:150px;gap:10px;margin-top:48px}
+.album figure{margin:0;position:relative;overflow:hidden;border-radius:8px;background:var(--sunk);min-width:0}
+.album img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.album figure:hover img{transform:scale(1.03)}
+.album figcaption{position:absolute;inset:auto 0 0 0;padding:28px 14px 12px;background:linear-gradient(transparent,var(--shade));color:var(--photoink);font-size:.95rem;line-height:1.35}
+.album figcaption b{display:block;font:600 1.35rem/1.1 var(--hand)}
+.f1{grid-column:span 4;grid-row:span 3}.f2{grid-column:span 8;grid-row:span 3}
+.f3{grid-column:span 5;grid-row:span 2}.f4{grid-column:span 4;grid-row:span 2}.f5{grid-column:span 3;grid-row:span 2}
+.f6{grid-column:span 4;grid-row:span 3}.f7{grid-column:span 8;grid-row:span 3}
+.lang{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:56px;margin-top:64px;align-items:start}
+.cefr{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:14px}
+.cefr span{font:500 13px var(--mono);text-align:center;padding:8px 0;border-radius:4px;background:var(--sunk);color:var(--muted)}
+.cefr span.on{background:var(--c);color:var(--on)}
+
+/* Sobre e contato */
+.about{padding-block:80px}
+.about .cols{margin-top:0}
+.about h2{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.05}
+.about .story{margin-top:24px}
+.facts{list-style:none;margin:0;padding:0;display:grid;gap:14px;font-size:1rem;line-height:1.4}
+.facts li{border-top:1px solid var(--line);padding-top:10px}
+.facts b{display:block;font:500 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.contact{display:grid;gap:6px;margin-top:28px;font:600 16px var(--disp)}
+.mail{user-select:all;overflow-wrap:anywhere}
+footer{border-top:1px solid var(--line);padding-block:24px;font:400 13px var(--mono);color:var(--muted)}
+
+@media(max-width:860px){
+  .hero{padding-block:16px 48px}
+  .ch,.about{padding-block:56px}
+  .legend,.meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cols,.qgrid,.dgrid,.scrolly{grid-template-columns:minmax(0,1fr)}
+  .cols{gap:32px;margin-top:36px}
+  .fig{order:-1;top:env(safe-area-inset-top,0px);z-index:2;margin-top:36px}
+  .fig .stage{padding:12px;gap:10px}
+  .step{min-height:62vh;justify-content:flex-start;padding-top:24px}
+  .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tools{grid-template-columns:minmax(0,1fr)}
+  .flow{grid-template-columns:minmax(0,1fr)}
+  .flow li:not(:last-child)::after{content:"↓";right:auto;left:20px;top:auto;bottom:-15px;transform:none}
+  .rule{grid-template-columns:minmax(0,1fr);gap:10px}
+  .album{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:auto}
+  .album figure{grid-column:span 2;grid-row:auto;aspect-ratio:4/3;max-width:100%}
+  .album .f1,.album .f6{aspect-ratio:4/5}
+  .album figcaption{font-size:.85rem;padding:24px 10px 10px}
+  .lang{grid-template-columns:minmax(0,1fr);gap:24px;margin-top:48px}
+  .fig .count{gap:16px;font-size:.85rem}
+  .fig .count b{font-size:1.25rem}
+  .figfoot{min-height:0}
+}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+
+<div class="wrap">
+  <nav class="nav">
+    <strong>Gabriel Mosquer</strong>
+    <div>
+      <a href="#quimicai" data-en="Projects">Projetos</a>
+      <a href="#el-paso" data-en="Exchange">Intercâmbio</a>
+      <a href="#sobre" data-en="About">Sobre</a>
+      <a href="https://www.linkedin.com/in/gabrielmosquer/">LinkedIn</a>
+      <a href="https://github.com/GabrielSartoriMosquer">GitHub</a>
+      <button id="lang" class="ghost" type="button">EN</button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1 data-en="Every dot was a task done by hand.">Cada ponto era uma tarefa feita à mão.</h1>
+    <p class="lead" data-en="I'm Gabriel Mosquer, a Data Science and AI student in Florianópolis, Brazil. I build pipelines, analyses and AI tools that take repetitive work off people's hands. The dots show the scale of each project on this page.">Sou Gabriel Mosquer, estudante de Ciência de Dados e IA em Florianópolis. Construo pipelines, análises e ferramentas com IA que tiram trabalho repetitivo das pessoas. Os pontos mostram a escala de cada projeto desta página.</p>
+    <div class="field">
+      <canvas id="dots" role="img" aria-label="1.674 pontos organizados em quatro blocos, um por projeto"></canvas>
+      <div class="fieldbar">
+        <span data-en="1,674 dots, sorted into four projects">1.674 pontos, organizados em quatro projetos</span>
+        <button id="shuffle" class="ghost" type="button" data-en="Shuffle and sort again">Embaralhar e organizar de novo</button>
+      </div>
+    </div>
+    <ul class="legend">
+      <li style="--c:var(--q)"><a href="#quimicai"><b>40</b><span data-en="compounds per sample">compostos por amostra</span><em>QuimicAI</em></a></li>
+      <li style="--c:var(--t)"><a href="#frota"><b>82</b><span data-en="mobile lines analyzed">linhas de celular analisadas</span><em data-en="Mobile fleet">Frota de telefonia</em></a></li>
+      <li style="--c:var(--d)"><a href="#diario"><b>52</b><span data-en="manual checks a year">checagens manuais por ano</span><em data-en="Official Gazette monitor">Monitor do Diário Oficial</em></a></li>
+      <li style="--c:var(--r)"><a href="#renomeador"><b id="n1500">1.500</b><span data-en="files renamed">arquivos renomeados</span><em data-en="Photo renamer">Renomeador de fotos</em></a></li>
+    </ul>
+  </header>
+</div>
+
+<main>
+<!-- QuimicAI -->
+<section class="ch" id="quimicai" style="--c:var(--q)"><div class="wrap">
+  <div class="kickrow"><p class="kick" data-en="AI demo">Demo de IA</p><span class="badge" data-en="Prototype · pilot in preparation">Protótipo · piloto em preparação</span></div>
+  <h2>QuimicAI</h2>
+  <p class="hook" data-en="A copilot for the chemist who has to find out what the unnamed peaks are.">Um copiloto para o químico que precisa descobrir o que são os picos sem nome.</p>
+  <dl class="meta">
+    <div><dt data-en="Role">Papel</dt><dd data-en="Concept, API integration and data flow, as part of a team">Concepção, integração das APIs e fluxo de dados, em equipe</dd></div>
+    <div><dt>Stack</dt><dd data-en="Python · PubChem, ChEBI and KEGG · Gemini · Docker">Python · PubChem, ChEBI e KEGG · Gemini · Docker</dd></div>
+    <div><dt data-en="Context">Contexto</dt><dd data-en="Applied project at UniSENAI with IST Ambiental (SENAI)">Projeto aplicado da UniSENAI com o IST Ambiental (SENAI)</dd></div>
+    <div><dt data-en="Result">Resultado</dt><dd data-en="Working prototype, with a lab pilot being prepared">Protótipo funcional, com piloto em preparação no laboratório</dd></div>
+  </dl>
+  <div class="cols">
+    <div class="story">
+      <p data-en="For each sample, a mass spectrometer returns a list of candidates. About 40 of them come back without automatic identification. Looking them up one by one in public databases took around a week per batch.">Para cada amostra, um espectrômetro de massas devolve uma lista de candidatos. Cerca de 40 deles voltam sem identificação automática. Pesquisar um por um em bases públicas levava em torno de uma semana por lote.</p>
+      <p data-en="QuimicAI takes the tables exported by the instrument, queries PubChem, ChEBI and KEGG for each candidate and returns the enriched table. Then an assistant reads that table and points out what doesn't add up.">O QuimicAI recebe as tabelas exportadas pelo instrumento, consulta PubChem, ChEBI e KEGG para cada candidato e devolve a tabela enriquecida. Depois, um assistente lê essa tabela e aponta o que não bate.</p>
+    </div>
+    <aside class="why">
+      <h3 data-en="Why temperature 0?">Por que temperatura 0?</h3>
+      <p data-en="In an accredited lab, every decision has to be traceable. The assistant only answers from what is in the table, and the chemist makes the call.">Num laboratório acreditado, cada decisão precisa ser rastreável. O assistente só responde com o que está na tabela, e quem decide é o químico.</p>
+    </aside>
+  </div>
+  <div class="bench" data-demo="q">
+    <div class="benchhead"><span class="status" aria-live="polite"></span><button class="ghost play" type="button" data-en="Run again">Rodar de novo</button></div>
+    <ol class="rail"></ol>
+    <div class="stage">
+      <div class="qgrid">
+        <div>
+          <div id="spec"></div>
+          <div class="scroll"><table><thead><tr><th data-en="Candidate">Candidato</th><th data-en="Measured">Medida</th><th data-en="Formula">Fórmula</th><th>CID</th><th data-en="Theoretical">Teórica</th><th>Δ ppm</th><th>Status</th></tr></thead><tbody id="qt"></tbody></table></div>
+        </div>
+        <div>
+          <div class="sources"><span data-en="Sources:">Fontes:</span><b>PubChem</b><b>ChEBI</b><b>KEGG</b></div>
+          <div class="term" id="qj"></div>
+          <div class="ask">
+            <h3 data-en="Ask the assistant">Pergunte ao assistente</h3>
+            <div class="chips" id="qc"></div>
+            <div class="answer" id="qa"></div>
+          </div>
+        </div>
+      </div>
+      <p class="note" data-en="Illustrative workflow: public compounds, fictional measurements and a 5 ppm limit chosen for the demo. Answers are pre-written and nothing is sent to an AI model. Click a peak or a row to see its lookup.">Fluxo ilustrativo: compostos públicos, medições fictícias e limite de 5 ppm escolhido para a demonstração. As respostas são pré-escritas e nada é enviado a um modelo de IA. Clique num pico ou numa linha para ver a consulta.</p>
+    </div>
+  </div>
+  <p class="code" data-en="The code is private under a confidentiality agreement.">O código é privado por acordo de confidencialidade.</p>
+</div></section>
+
+<!-- Bastidores do assistente -->
+<section class="ch" id="bastidores" style="--c:var(--q)"><div class="wrap">
+  <p class="kick" data-en="Prompt engineering">Engenharia de prompt</p>
+  <h2 data-en="Inside the assistant">Por dentro do assistente</h2>
+  <p class="hook" data-en="QuimicAI's assistant works as the chemist's devil's advocate: it analyzes, it pushes back, and it never decides.">O assistente do QuimicAI trabalha como advogado do diabo do químico: analisa, contesta e nunca decide.</p>
+  <ol class="flow" aria-label="Caminho de uma pergunta até a resposta">
+    <li><b data-en="Question">Pergunta</b><span data-en="The chemist asks about one peak.">O químico pergunta sobre um pico.</span></li>
+    <li><b data-en="Peak context">Contexto do pico</b><span data-en="The current table becomes compact JSON. Lists over 10 items are cut.">A tabela atual vira JSON compacto. Listas com mais de 10 itens são cortadas.</span></li>
+    <li><b data-en="NDA filter">Filtro de NDA</b><span data-en="If it finds sensitive data, the model isn't even called.">Se encontrar dado sensível, o modelo nem é chamado.</span><code>fail-closed</code></li>
+    <li><b>Gemini</b><span data-en="Pinned model, fixed system prompt.">Modelo fixo e prompt de sistema fixo.</span><code>temperature 0.0</code></li>
+    <li><b data-en="Answer + snapshot">Resposta + snapshot</b><span data-en="The context sent is saved to the audit trail.">O contexto enviado fica salvo na trilha de auditoria.</span></li>
+  </ol>
+  <div class="cols">
+    <div class="story">
+      <p data-en="Every question goes with the current state of the table: MS evidence for each candidate, what each database returned and whether the lookup worked, the rules that flagged it and the chemist's decision. The system prompt is fixed and the table travels in the user message.">Cada pergunta vai com o estado atual da tabela: a evidência de MS de cada candidato, o que cada base devolveu e se a consulta deu certo, as regras que o sinalizaram e a decisão do químico. O prompt de sistema é fixo, e a tabela viaja na mensagem do usuário.</p>
+      <p data-en="When something fails, such as a missing key, an API error or an empty reply, the backend answers with a fixed message saying no analysis was made. Those answers stay out of the history, so the model never &quot;remembers&quot; something it didn't say.">Quando algo falha (chave ausente, erro na API ou resposta vazia), o backend responde com uma mensagem fixa avisando que nenhuma análise foi feita. Essas respostas ficam fora do histórico, para o modelo não "lembrar" do que não disse.</p>
+    </div>
+    <aside class="why">
+      <h3 data-en="Why a pinned model?">Por que modelo fixo?</h3>
+      <p data-en="With temperature 0, a pinned model and the context snapshot, an audited answer can be reproduced. That's why the project doesn't use the -latest alias.">Com temperatura 0, modelo fixo e o snapshot do contexto, uma resposta auditada pode ser refeita. Por isso o projeto não usa o alias -latest.</p>
+    </aside>
+  </div>
+  <div class="rules">
+    <p data-en="Excerpts from the system prompt, translated from Portuguese, with the reason for each rule">Trechos do prompt de sistema, com o motivo de cada regra</p>
+    <div class="rule"><blockquote data-en="Answer only from the context JSON. Never invent compounds, pathways or missing properties.">Responda apenas com base no JSON de contexto. Nunca invente compostos, vias ou propriedades ausentes.</blockquote><p data-en="Closed context. In an accredited lab, every claim has to point to a value in the table.">Contexto fechado. Num laboratório acreditado, toda afirmação precisa apontar para um dado da tabela.</p></div>
+    <div class="rule"><blockquote data-en="State where each value you cite comes from: Progenesis MS evidence, PubChem, ChEBI, KEGG, calculated structure or rule.">Diga de onde vem cada dado que citar: evidencia de MS do Progenesis, PubChem, ChEBI, KEGG, estrutura calculada ou regra.</blockquote><p data-en="Traceability: the chemist can check every number against the source it came from.">Rastreabilidade: o químico consegue conferir cada número na fonte de onde ele veio.</p></div>
+    <div class="rule"><blockquote data-en="A source with status `error` or `nao_tentado` is NOT evidence of absence: say the lookup failed or wasn&#x27;t made.">Fonte com status `error` ou `nao_tentado` NAO e evidencia de ausencia: diga que a consulta falhou ou nao foi feita.</blockquote><p data-en="A failed lookup doesn&#x27;t prove the compound is missing from the database. It&#x27;s an easy mistake to make, for people and for models.">Uma consulta que falhou não prova que o composto falta na base. É um erro fácil de cometer, para pessoas e para modelos.</p></div>
+    <div class="rule"><blockquote data-en="Never compute new scores, averages, mass errors or rankings; the backend has already calculated what exists.">Nunca faca calculos novos de score, media, erro de massa ou ranqueamento; o backend ja calculou o que existe.</blockquote><p data-en="Numbers come only from the backend, which is deterministic and tested. The model explains them but doesn&#x27;t compute them.">Os números vêm só do backend, que é determinístico e testado. O modelo explica os números, mas não os calcula.</p></div>
+    <div class="rule"><blockquote data-en="When listing candidates, use bullets (-), never a numbered list: a number next to a candidate looks like a rank.">Ao listar candidatos, use marcadores (-), nunca lista numerada: numero ao lado de candidato parece posicao.</blockquote><p data-en="This rule and the ban on LaTeX came from failures found in an evaluation on Oct 31, 2026. Table order isn&#x27;t a ranking, and a number next to a name suggested it was.">Esta regra e a proibição de LaTeX vieram de falhas encontradas numa avaliação de 31/10/2026. A ordem da tabela não é ranking, e um número ao lado do nome sugeria que era.</p></div>
+    <div class="rule"><blockquote data-en="You analyze and argue. You don&#x27;t remove candidates, record decisions or announce which compound it is: the chemist decides.">Voce analisa e argumenta. Nao retira candidato, nao registra decisao e nao anuncia qual e o composto: quem decide e o quimico.</blockquote><p data-en="Human in control. The assistant can disagree with the chemist and point to the conflicting data, but the decision and its record are the chemist&#x27;s.">Humano no controle. O assistente pode discordar do químico e apontar o dado conflitante, mas a decisão e o registro são dele.</p></div>
+    <div class="rule"><blockquote data-en="If a previous answer contradicts the current context (a candidate removed later, an enrichment that arrived later), the current context wins, and say something changed.">Se uma resposta anterior contradizer o contexto atual (um candidato retirado depois, um enriquecimento que chegou depois), vale o contexto atual, e diga que algo mudou.</blockquote><p data-en="The history carries the last 8 exchanges, but the table only goes in the last message. If the table changed mid-conversation, the current version wins.">O histórico leva as últimas 8 trocas, mas a tabela vai só na última mensagem. Se a tabela mudou no meio da conversa, vale a versão atual.</p></div>
+  </div>
+  <details class="full"><summary data-en="See the full system prompt (in Portuguese)">Ver o prompt de sistema completo</summary><pre>Voce e o Pair Chemical, um especialista analitico que atua como advogado do diabo ao lado de um quimico que analisa UM pico de espectrometria de massas.
+
+O contexto JSON e a tabela desse pico, como o quimico a ve: o cabecalho do pico (tempo de retencao, m/z, massa neutra, abundancia por amostra) e todos os candidatos que o Progenesis propos, cada um com a evidencia de MS, o que cada fonte externa devolveu e o status dessa consulta, as regras deterministicas que o sinalizaram e a decisao do quimico sobre ele.
+
+Regras obrigatorias:
+- Responda apenas com base no JSON de contexto. Nunca invente compostos, vias ou propriedades ausentes.
+- Diga de onde vem cada dado que citar: evidencia de MS do Progenesis, PubChem, ChEBI, KEGG, estrutura calculada ou regra.
+- A fonte `estrutura` e calculada pelo sistema a partir do nome do candidato ou do SMILES de uma fonte (o metodo esta em `metodo_estrutura`); nao e base externa e nao prova que o composto exista em alguma base. Ao citar um valor dela (logP, TPSA, massa), diga que e calculado.
+- Lista acompanhada de `&lt;campo&gt;_total` foi cortada para caber no contexto: a tabela do quimico tem todos os itens.
+- Fonte com status `error` ou `nao_tentado` NAO e evidencia de ausencia: diga que a consulta falhou ou nao foi feita.
+- Nunca faca calculos novos de score, media, erro de massa ou ranqueamento; o backend ja calculou o que existe.
+- A ordem da tabela e so de leitura: nao ha posicao nem candidato sugerido. Nunca chame um candidato de primeiro, topo ou melhor por causa da ordem.
+- Candidato com chemist_status &quot;retirado pelo quimico&quot; foi retirado por ele, pelo motivo em chemist_justification. Reconheca isso sempre que ele aparecer e nao o reapresente como se nada tivesse acontecido.
+- Voce analisa e argumenta. Nao retira candidato, nao registra decisao e nao anuncia qual e o composto: quem decide e o quimico.
+- Se a hipotese do quimico contrariar a evidencia de MS, uma regra ou o dado de uma fonte, discorde e aponte o dado conflitante.
+- Se a pergunta exigir dado ausente, diga explicitamente que a tabela nao suporta a afirmacao.
+- Ao listar candidatos, use marcadores (-), nunca lista numerada: numero ao lado de candidato parece posicao.
+- Escreva formulas em texto simples (C6H12O6), sem LaTeX nem cifroes: a tela nao renderiza LaTeX.
+- A conversa anterior serve para entender a pergunta (&quot;e o segundo que voce citou?&quot;), mas o contexto JSON da ultima mensagem e o estado ATUAL da tabela. Se uma resposta anterior contradizer o contexto atual (um candidato retirado depois, um enriquecimento que chegou depois), vale o contexto atual, e diga que algo mudou.
+- Seja conciso, tecnico e util.</pre></details>
+</div></section>
+
+<!-- Frota de telefonia -->
+<section class="ch" id="frota" style="--c:var(--t)"><div class="wrap">
+  <div class="kickrow"><p class="kick" data-en="Data project">Projeto de dados</p><span class="badge" data-en="Delivered to management">Entregue à gestão</span></div>
+  <h2 data-en="Mobile fleet">Frota de telefonia</h2>
+  <p class="hook" data-en="82 corporate lines and one simple question: how much plan does each one need?">82 linhas corporativas e uma pergunta simples: de quanto plano cada uma precisa?</p>
+  <dl class="meta">
+    <div><dt data-en="Role">Papel</dt><dd data-en="The whole analysis, from exploration to recommendation">Análise completa, da exploração à recomendação</dd></div>
+    <div><dt>Stack</dt><dd>Python · pandas · scikit-learn · Jupyter</dd></div>
+    <div><dt data-en="Context">Contexto</dt><dd data-en="Corporate mobile fleet of 82 lines">Frota corporativa de celulares com 82 linhas</dd></div>
+    <div><dt data-en="Result">Resultado</dt><dd data-en="Cancellation and plan-change recommendations presented to management">Recomendações de cancelamento e troca de plano apresentadas à gestão</dd></div>
+  </dl>
+  <div class="scrolly">
+    <div class="steps">
+      <div class="step on" data-s="0"><h3 data-en="It all starts with the bill.">Tudo começa com a fatura.</h3><p data-en="There are 82 lines and six billing cycles for each. On the bill they all look the same: a number and an amount.">São 82 linhas e seis ciclos de consumo de cada uma. Na fatura elas parecem iguais: um número e um valor.</p></div>
+      <div class="step" data-s="1"><h3 data-en="Each line has its own way of using data.">Cada linha tem um jeito de usar.</h3><p data-en="The horizontal axis is average data usage. The vertical axis is how much that usage changes from one month to the next.">No eixo horizontal está o consumo médio de dados. No vertical, o quanto esse consumo muda de um mês para o outro.</p></div>
+      <div class="step" data-s="2"><h3 data-en="Four profiles show up.">Quatro perfis aparecem.</h3><p data-en="K-means splits the lines into groups: no usage, sporadic, light and heavy. Lines with no usage are candidates for cancellation, once someone confirms.">Um k-means separa as linhas em grupos: sem uso, uso esporádico, uso leve e uso intenso. As linhas sem uso são candidatas a cancelamento, depois que alguém confirmar.</p></div>
+      <div class="step" data-s="3"><h3 data-en="Now, the right plan.">Agora, o plano certo.</h3><p data-en="For each line, I take the highest usage observed, apply a safety margin and pick the smallest plan that covers it. Move the margin and watch cost and risk change.">Para cada linha, pego o maior consumo observado, aplico uma margem de segurança e escolho o menor plano que cobre o resultado. Mexa na margem e veja o custo e o risco mudarem.</p></div>
+    </div>
+    <div class="fig bench">
+      <div class="benchhead"><div class="tabs" id="ttabs"></div></div>
+      <div class="stage">
+        <svg id="tsvg" class="s0" viewBox="0 0 560 380" role="img" aria-label="82 linhas de celular representadas por pontos"></svg>
+        <div class="figfoot">
+          <p class="note" id="tcap"></p>
+          <div class="sim" id="tsim" hidden>
+            <label for="tm"><span data-en="Safety margin">Margem de segurança</span><span id="tv"></span></label>
+            <input id="tm" type="range" min="1" max="2" step="0.1" value="1.3">
+            <div class="count"><span><b id="tcost"></b><span data-en="monthly cost">custo mensal</span></span><span><b id="tfail"></b><span data-en="cycles over plan">ciclos acima do plano</span></span><span><b id="tdead"></b><span data-en="lines to investigate">linhas para investigar</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cols">
+    <aside class="why">
+      <h3 data-en="Why this metric?">Por que essa métrica?</h3>
+      <p data-en="Going over a plan doesn't cost extra, it only slows the connection. So I measured risk as the share of cycles in which a line would exceed its plan, testing each rule on the months it hadn't seen (leave-one-out).">Passar do plano não gera cobrança extra, só reduz a velocidade. Então medi o risco como a parcela de ciclos em que a linha passaria do plano, testando cada regra nos meses que ela não tinha visto (leave-one-out).</p>
+    </aside>
+    <p class="note" data-en="The calculations really run in your browser: k-means and leave-one-out on 82 synthetic lines, with an illustrative plan catalog. No real data appears here, and the real project is internal.">Os cálculos rodam de verdade no seu navegador: k-means e leave-one-out sobre 82 linhas sintéticas, com catálogo de planos ilustrativo. Nenhum dado real aparece aqui, e o projeto real é interno.</p>
+  </div>
+</div></section>
+
+<!-- Diário Oficial -->
+<section class="ch" id="diario" style="--c:var(--d)"><div class="wrap">
+  <div class="kickrow"><p class="kick" data-en="Automation in production">Automação em produção</p><span class="badge live" data-en="In production for almost a year">Em produção há quase 1 ano</span></div>
+  <h2 data-en="Official Gazette monitor">Monitor do Diário Oficial</h2>
+  <p class="hook" data-en="A bot that reads Brazil's Official Gazette every day so nobody has to remember.">Um robô que lê o Diário Oficial todo dia para ninguém precisar lembrar.</p>
+  <dl class="meta">
+    <div><dt data-en="Role">Papel</dt><dd data-en="Development and operation">Desenvolvimento e operação</dd></div>
+    <div><dt>Stack</dt><dd data-en="n8n · web scraping · scheduling">n8n · web scraping · agendamento</dd></div>
+    <div><dt data-en="Context">Contexto</dt><dd data-en="Federal ordinances that affect the institution">Portarias federais que afetam a instituição</dd></div>
+    <div><dt data-en="Result">Resultado</dt><dd data-en="Almost a year in production, checking every day">Quase um ano em produção, conferindo todo dia</dd></div>
+  </dl>
+  <div class="cols">
+    <div class="story">
+      <p data-en="Every week, someone had to open the Official Gazette and look for relevant ordinances. It only took a few minutes. The risk was relying on someone's memory.">Toda semana, alguém precisava abrir o Diário Oficial da União e procurar portarias de interesse. Eram poucos minutos. O risco estava em depender da memória de alguém.</p>
+      <p data-en="The bot runs every day, compares each publication with a list of terms and alerts the team only when it finds something. On most days it says nothing.">O robô roda todo dia, compara cada publicação com uma lista de termos e avisa a equipe só quando encontra algo. Na maioria dos dias ele não diz nada.</p>
+      <p data-en="In almost a year of daily runs, it has fired twice, because the institution rarely appears in the Gazette. On every other day, my colleague didn't have to open the Gazette to be sure of that.">Em quase um ano rodando todo dia, o robô disparou duas vezes, porque a instituição raramente aparece no Diário. Nos outros dias, a colaboradora não precisou abrir o Diário para ter certeza disso.</p>
+    </div>
+    <aside class="why">
+      <h3 data-en="What was the real gain?">Qual foi o ganho real?</h3>
+      <p data-en="Not time. The gain is one less item on the checklist and the certainty that the check happens.">Não foi tempo. O ganho é um item a menos no checklist e a certeza de que a checagem acontece.</p>
+    </aside>
+  </div>
+  <div class="bench" data-demo="d">
+    <div class="benchhead"><span class="status" aria-live="polite"></span><button class="ghost play" type="button" data-en="Run again">Rodar de novo</button></div>
+    <ol class="rail"></ol>
+    <div class="stage">
+      <div class="terms" id="dterms"></div>
+      <div class="dgrid">
+        <div><div class="week" id="dweek"></div><div id="dlist" style="display:grid;gap:6px"></div></div>
+        <div class="alert" id="dalert"></div>
+      </div>
+      <p class="note" data-en="Fictional publications and illustrative terms. The filter really runs in your browser: turn terms on and off to see what gets caught.">Publicações fictícias e termos ilustrativos. O filtro roda de verdade no seu navegador: ligue e desligue os termos para ver o que é capturado.</p>
+    </div>
+  </div>
+  <p class="code" data-en="Internal workflow in production.">Fluxo interno em produção.</p>
+</div></section>
+
+<!-- Renomeador -->
+<section class="ch" id="renomeador" style="--c:var(--r)"><div class="wrap">
+  <div class="kickrow"><p class="kick" data-en="Automation · open source">Automação · código aberto</p><span class="badge" data-en="Run completed">Execução concluída</span></div>
+  <h2 data-en="Photo renamer">Renomeador de fotos</h2>
+  <p class="hook" data-en="1,500 files with the wrong name and a system that only accepts the right one.">1.500 arquivos com o nome errado e um sistema que só aceita o nome certo.</p>
+  <dl class="meta">
+    <div><dt data-en="Role">Papel</dt><dd data-en="Author">Autor</dd></div>
+    <div><dt>Stack</dt><dd>Python · Selenium</dd></div>
+    <div><dt data-en="Context">Contexto</dt><dd data-en="Registration photos for a turnstile system">Fotos de cadastro para um sistema de catraca</dd></div>
+    <div><dt data-en="Result">Resultado</dt><dd data-en="Dozens of hours of manual work done in a few minutes">Dezenas de horas de trabalho manual em alguns minutos</dd></div>
+  </dl>
+  <div class="cols">
+    <div class="story">
+      <p data-en="Each photo arrived with an ID number in its name. The turnstile system required a different code, which only existed inside a web system. The manual route was to open the system, search for the person, copy the code and rename the file, 1,500 times.">Cada foto chegava com um número de identificação no nome. O sistema da catraca exigia outro código, que só existia dentro de um sistema web. O caminho manual era abrir o sistema, buscar a pessoa, copiar o código e renomear o arquivo, 1.500 vezes.</p>
+      <p data-en="The bot follows the same route with Selenium and writes each file to a log, so the run can be checked afterwards.">O robô faz esse mesmo caminho com Selenium e registra cada arquivo num log, para a execução poder ser conferida depois.</p>
+    </div>
+    <aside class="why">
+      <h3 data-en="Why keep a log?">Por que um log?</h3>
+      <p data-en="With 1,500 files, nobody checks them one by one. The log shows what was renamed and what failed.">Com 1.500 arquivos, ninguém confere um por um. O log mostra o que foi renomeado e o que falhou.</p>
+    </aside>
+  </div>
+  <div class="bench" data-demo="r">
+    <div class="benchhead"><span class="status" aria-live="polite"></span><button class="ghost play" type="button" data-en="Run again">Rodar de novo</button></div>
+    <ol class="rail"></ol>
+    <div class="stage">
+      <div class="pipe" id="rpipe"></div>
+      <canvas id="rgrid" role="img" aria-label="Grade de 1.500 quadrados, um por arquivo"></canvas>
+      <div class="count"><span><b id="rc"></b><span data-en="of 1,500 files renamed">de 1.500 arquivos renomeados</span></span></div>
+      <form class="try" id="rform">
+        <label for="rid" data-en="Try a number">Teste com um número</label>
+        <input id="rid" inputmode="numeric" maxlength="6" value="20417" autocomplete="off">
+        <button class="solid" type="submit" data-en="Rename">Renomear</button>
+        <output id="rout" for="rid"></output>
+      </form>
+      <p class="note" data-en="Fictional files and codes: the code is generated here in your browser, and no real photo is used.">Arquivos e códigos fictícios: o código é gerado aqui no navegador, e nenhuma foto real é usada.</p>
+    </div>
+  </div>
+  <p class="code"><a href="https://github.com/GabrielSartoriMosquer/auto-renamer-bot" data-en="See the code on GitHub ↗">Ver o código no GitHub ↗</a></p>
+</div></section>
+</main>
+
+<section class="ch" id="mais" style="--c:var(--ink)"><div class="wrap">
+  <p class="kick" data-en="Internal tools and AI at work">Ferramentas internas e IA no dia a dia</p>
+  <h2 data-en="More tools in use">Mais ferramentas em uso</h2>
+  <p class="hook" data-en="Smaller pieces of work that other people rely on.">Trabalhos menores, mas que outras pessoas usam de verdade.</p>
+  <div class="tools">
+    <article class="tool">
+      <div class="kickrow"><h3 data-en="Automated certificates">Certificados automáticos</h3><span class="badge" style="--c:var(--t)" data-en="Used by the institution">Usado pela instituição</span></div>
+      <div class="big">330+<small data-en="certificates generated and emailed">certificados gerados e enviados</small></div>
+      <p data-en="A spreadsheet of participants and a Google Slides template become certificates sent by email. The automation also checks what was delivered and what was missing.">Uma planilha de participantes e um modelo no Google Slides viram certificados enviados por e-mail. A automação também confere o que chegou e o que ficou faltando.</p>
+      <p data-en="The delivery log went to the board, and HR contacted everyone who didn't receive theirs directly, so nobody was left out.">O log de entregas foi para a diretoria, e o RH contatou diretamente quem não recebeu, para ninguém ficar esquecido.</p>
+      <p class="stack">Google Apps Script · Google Slides · Gmail</p>
+    </article>
+    <article class="tool">
+      <div class="kickrow"><h3 data-en="MEC calculator">Calculadora MEC</h3><span class="badge" style="--c:var(--t)" data-en="In regular use">Em uso frequente</span></div>
+      <div class="big">2<small data-en="people use it regularly">pessoas usam com frequência</small></div>
+      <p data-en="It reads the spreadsheet exported from the academic system and calculates, for each school, the scholarship and discount figures for the report to Brazil's Ministry of Education (MEC). Before, each report was downloaded and checked by hand, school by school.">Lê a planilha exportada do sistema acadêmico e calcula, por colégio, os números de bolsas e descontos do relatório ao MEC. Antes, cada relatório era baixado e conferido à mão, colégio por colégio.</p>
+      <p data-en="It flags students who don't fit any category and keeps logs, so errors can be traced.">Avisa quando um aluno não se encaixa em nenhuma categoria e guarda logs para rastrear erros.</p>
+      <p class="stack" data-en="Python · execution logs">Python · logs de execução</p>
+    </article>
+    <article class="tool">
+      <div class="kickrow"><h3 data-en="AI training">Capacitação em IA</h3><span class="badge" style="--c:var(--q)" data-en="Delivered">Realizada</span></div>
+      <div class="big">27<small data-en="slides of original material, plus a pocket guide">slides de material próprio, mais um guia de bolso</small></div>
+      <p data-en="In-person training so administrative teams could use AI in their daily work. I wrote the material myself, built around Gemini.">Treinamento presencial para as equipes administrativas usarem IA no trabalho. Escrevi o material, construído em torno do Gemini.</p>
+      <p class="stack">Gemini</p>
+    </article>
+    <article class="tool">
+      <div class="kickrow"><h3 data-en="Study tutor">Tutor de estudos</h3><span class="badge" style="--c:var(--r)" data-en="In use">Em uso</span></div>
+      <div class="big">11<small data-en="modules in the core track I wrote for it">módulos na trilha base que escrevi para ele</small></div>
+      <p data-en="A personal study system that runs in Claude Code, uses Obsidian as the reading panel and exports flashcards to Anki at the end of each session. I use it for everything from software architecture to philosophy.">Sistema pessoal de estudos que roda no Claude Code, usa o Obsidian como painel de leitura e exporta cards para o Anki no fim de cada sessão. Uso para estudar de arquitetura de software a filosofia.</p>
+      <p class="stack">Claude Code · Obsidian · Anki</p>
+    </article>
+  </div>
+</div></section>
+
+<section class="ch" id="el-paso" style="--c:var(--x)"><div class="wrap">
+  <p class="kick" data-en="International experience">Experiência internacional</p>
+  <h2>El Paso, Texas</h2>
+  <p class="hook" data-en="A program in the US with teams from three universities and a real water problem.">Um programa nos EUA com equipes de três universidades e um problema real de água.</p>
+  <dl class="meta">
+    <div><dt data-en="Program">Programa</dt><dd>US-Brazil RISE</dd></div>
+    <div><dt data-en="Host">Anfitriã</dt><dd data-en="University of Texas at El Paso (UTEP)">University of Texas at El Paso (UTEP)</dd></div>
+    <div><dt data-en="Teams">Equipes</dt><dd>UTEP · PUCPR · UniSENAI</dd></div>
+    <div><dt data-en="Language">Idioma</dt><dd data-en="English, every day">Inglês, todos os dias</dd></div>
+  </dl>
+  <div class="cols">
+    <div class="story">
+      <p data-en="RISE brings together students from UTEP, PUCPR and UniSENAI in multidisciplinary teams to develop sustainable solutions. My group's case was to propose a new model for the water storage tanks used in the colonias of El Paso, communities on the border with Mexico.">O RISE reúne estudantes da UTEP, da PUCPR e da UniSENAI em equipes multidisciplinares para desenvolver soluções sustentáveis. O caso do meu grupo foi propor um novo modelo para os tanques de armazenamento de água das colonias de El Paso, comunidades na fronteira com o México.</p>
+      <p data-en="Our team combined civil engineering, chemical engineering, software development and data science. I had to explain data to engineers and learn their vocabulary in return, all in English.">Nossa equipe juntava engenharia civil, engenharia química, desenvolvimento de software e ciência de dados. Precisei explicar dados para engenheiros e aprender o vocabulário deles em troca, tudo em inglês.</p>
+    </div>
+    <aside class="why">
+      <h3 data-en="What did I bring back?">O que eu trouxe de volta?</h3>
+      <p data-en="I saw data outside the screen: sensor curves in a control room, a spectrum in a lab class. It's the same kind of data that shows up in QuimicAI today.">Vi dados fora da tela: curvas de sensores numa sala de controle, um espectro numa aula de laboratório. É o mesmo tipo de dado que hoje aparece no QuimicAI.</p>
+    </aside>
+  </div>
+  <div class="album">
+    <figure class="f1"><img src="img/trilha-grupo.jpg" alt="Grupo do programa posando numa trilha, com montanhas rochosas ao fundo" data-en-alt="Program group posing on a trail, with rocky mountains behind" loading="lazy"><figcaption><b data-en="The group">O grupo</b><span data-en="Students and professors from both countries.">Estudantes e professores dos dois países.</span></figcaption></figure>
+    <figure class="f2"><img src="img/aula-laboratorio.jpg" alt="Professor apresenta um slide sobre adsorção de corante azul, com frascos azuis sobre a mesa" data-en-alt="Professor presents a slide on blue dye adsorption, with blue vials on the table" loading="lazy"><figcaption><b data-en="Lab class">Aula de laboratório</b><span data-en="Blue dye adsorption: peak absorbance of 0.936 at 625 nm.">Adsorção de corante azul: absorbância máxima de 0,936 em 625 nm.</span></figcaption></figure>
+    <figure class="f3"><img src="img/sala-de-controle.jpg" alt="Operador numa sala de controle com vários monitores mostrando gráficos de tendência" data-en-alt="Operator in a control room with several monitors showing trend charts" loading="lazy"><figcaption><b data-en="Control room">Sala de controle</b><span data-en="Water treatment: sensor data in real time.">Tratamento de água: dados de sensores em tempo real.</span></figcaption></figure>
+    <figure class="f4"><img src="img/overlay-test.jpg" alt="Equipamento de ensaio de asfalto em frente a um quadro com fórmulas" data-en-alt="Asphalt testing equipment in front of a whiteboard with formulas" loading="lazy"><figcaption><b>Overlay Test</b><span data-en="Pavement lab: how asphalt resists cracking.">Laboratório de pavimentos: como o asfalto resiste a trincas.</span></figcaption></figure>
+    <figure class="f5"><img src="img/bandeiras.jpg" alt="Bandeiras dos Estados Unidos e do Texas num mastro" data-en-alt="United States and Texas flags on a flagpole" loading="lazy"><figcaption><b>Texas</b></figcaption></figure>
+    <figure class="f6"><img src="img/fim-da-trilha.jpg" alt="Gabriel sorrindo ao lado de uma placa de fim de trilha" data-en-alt="Gabriel smiling next to an end of trail sign" loading="lazy"><figcaption><b data-en="End of trail">Fim da trilha</b><span data-en="Not of the program.">Não do programa.</span></figcaption></figure>
+    <figure class="f7"><img src="img/carro.jpg" alt="Selfie de cinco colegas dentro de um carro" data-en-alt="Selfie of five friends inside a car" loading="lazy"><figcaption><b data-en="On the road">Na estrada</b><span data-en="The friends who made the trip.">Os amigos que fizeram a viagem.</span></figcaption></figure>
+  </div>
+  <div class="lang">
+    <div>
+      <h3 class="hand" style="font-size:2rem" data-en="English">Inglês</h3>
+      <div class="cefr" aria-label="Nível C1 no Quadro Europeu Comum de Referência"><span>A1</span><span>A2</span><span>B1</span><span>B2</span><span class="on">C1</span><span>C2</span></div>
+      <p class="note" style="margin-top:8px" data-en="EF SET certificate, CEFR scale">Certificado EF SET, escala CEFR</p>
+    </div>
+    <div class="story">
+      <p data-en="I hold a C1 certificate from EF SET, and RISE was where I put it to the test: classes, technical visits and teamwork with people from other fields, entirely in English.">Tenho certificado C1 no EF SET, e o RISE foi onde coloquei isso à prova: aulas, visitas técnicas e trabalho em equipe com pessoas de outras áreas, tudo em inglês.</p>
+      <p data-en="That's why I'm comfortable working on international and remote teams. This site is in both languages for the same reason.">Por isso me sinto à vontade para trabalhar em equipes internacionais e remotas. Este site está nos dois idiomas pelo mesmo motivo.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="about" id="sobre"><div class="wrap"><div class="cols">
+  <div>
+    <h2 data-en="I like problems where data takes repetitive work off people.">Gosto de problemas em que dados tiram trabalho repetitivo das pessoas.</h2>
+    <div class="story">
+      <p data-en="I study Data Science and Artificial Intelligence at UniSENAI, in Florianópolis. At work, I build automations and analyses for routines that used to be fully manual.">Estudo Ciência de Dados e Inteligência Artificial na UniSENAI, em Florianópolis. No trabalho, construo automações e análises para rotinas que eram totalmente manuais.</p>
+    </div>
+    <div class="contact">
+      <span class="mail">gabriel.sartori.mosquer@gmail.com</span>
+      <a href="https://www.linkedin.com/in/gabrielmosquer/">linkedin.com/in/gabrielmosquer</a>
+      <a href="https://github.com/GabrielSartoriMosquer">github.com/GabrielSartoriMosquer</a>
+    </div>
+  </div>
+  <ul class="facts">
+    <li><b data-en="Education">Formação</b><span data-en="BSc in Data Science and AI, UniSENAI (class of 2028)">Bacharelado em Ciência de Dados e IA, UniSENAI (formatura em 2028)</span></li>
+    <li><b data-en="Exchange">Intercâmbio</b><span data-en="US-Brazil RISE program, at UTEP (El Paso, Texas)">Programa US-Brazil RISE, na UTEP (El Paso, Texas)</span></li>
+    <li><b data-en="English">Inglês</b><span>C1 (EF SET)</span></li>
+    <li><b data-en="Certification">Certificação</b><span>AWS Cloud Foundations</span></li>
+  </ul>
+</div></div></section>
+<footer><div class="wrap" data-en="Built by hand with HTML, CSS and JavaScript. No framework, no tracking.">Feito à mão com HTML, CSS e JavaScript. Sem framework e sem rastreamento.</div></footer>
+
+<script>
+/* ---------- Utilidades e idioma ---------- */
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let lang='';try{lang=localStorage.getItem('lang')||''}catch(e){}
+if(!lang)lang=(navigator.language||'pt').toLowerCase().startsWith('pt')?'pt':'en';
+const E=(p,e)=>lang=='en'?e:p,LOC=()=>lang=='en'?'en-US':'pt-BR';
+const num=(v,d=0)=>v.toLocaleString(LOC(),{minimumFractionDigits:d,maximumFractionDigits:d});
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const RENDER=[];   // funções que redesenham textos gerados por script quando o idioma muda
+const REPAINT=[];  // funções que redesenham canvas quando o tema ou a largura muda
+
+/* ---------- Motor das demos com etapas ---------- */
+class Stop extends Error{}
+const SPEED=2.4; // multiplica todas as pausas das demos: maior = mais lento
+function bench(key,steps,final,run){
+  const el=$(`[data-demo=${key}]`),rail=el.querySelector('.rail'),st=el.querySelector('.status');
+  let tok=0,seen=false;
+  const mark=i=>[...rail.children].forEach((l,n)=>l.className=n<i?'done':n==i?'on':'');
+  const rest=()=>{tok++;rail.innerHTML=steps.map(s=>`<li>${E(...s)}</li>`).join('');mark(steps.length);final();st.textContent=E('Fluxo concluído','Workflow complete')};
+  async function go(){
+    if(reduce){rest();return}
+    const me=++tok;
+    const w=ms=>new Promise((r,j)=>setTimeout(()=>me==tok?r():j(new Stop),ms*SPEED));
+    const step=(i,p,e)=>{mark(i);st.textContent=E(p,e)};
+    try{await run(w,step);if(me==tok)rest()}catch(e){if(!(e instanceof Stop))throw e}
+  }
+  el.querySelector('.play').onclick=go;rest();RENDER.push(rest);
+  new IntersectionObserver((e,o)=>{if(e[0].isIntersecting&&!seen){seen=true;o.disconnect();go()}},{threshold:.3}).observe(el);
+  return {rest};
+}
+
+/* ---------- Abertura: 1.674 pontos ---------- */
+const HG=[[40,'q'],[82,'t'],[52,'d'],[1500,'r']],hc=$('#dots'),hx=hc.getContext('2d');
+let HD=[],HS={},ht=1,hraf=0;
+function hlayout(){
+  const W=hc.parentElement.clientWidth,p=W>900?10:W>600?8:6,avail=Math.floor(W/p);let R=8,tot=0;
+  for(;;R++){tot=HG.reduce((s,g)=>s+Math.ceil(g[0]/R),0)+9;if(tot<=avail)break}
+  const H=R*p,dpr=window.devicePixelRatio||1,off=(W-tot*p)/2;
+  hc.style.height=H+'px';hc.width=W*dpr;hc.height=H*dpr;hx.setTransform(dpr,0,0,dpr,0,0);
+  let col=0,k=0;
+  HG.forEach(([n],g)=>{for(let i=0;i<n;i++,k++){const d=HD[k]||(HD[k]={sx:Math.random(),sy:Math.random(),dl:Math.random()});d.g=g;d.tx=off+(col+Math.floor(i/R)+.5)*p;d.ty=(i%R+.5)*p}col+=Math.ceil(n/R)+3});
+  HS={W,H,p};
+}
+function hdraw(){
+  const {W,H,p}=HS,cols=HG.map(g=>css('--'+g[1])),grey=css('--muted');hx.clearRect(0,0,W,H);
+  for(const d of HD){
+    const l=Math.min(1,Math.max(0,ht*1.7-d.dl*.7)),e=l<.5?4*l*l*l:1-Math.pow(-2*l+2,3)/2;
+    hx.globalAlpha=e>.5?1:.45;hx.fillStyle=e>.5?cols[d.g]:grey;
+    hx.beginPath();hx.arc(d.sx*W+(d.tx-d.sx*W)*e,d.sy*H+(d.ty-d.sy*H)*e,p*.34,0,7);hx.fill();
+  }
+  hx.globalAlpha=1;
+}
+function hplay(){
+  cancelAnimationFrame(hraf);if(reduce){ht=1;hdraw();return}
+  HD.forEach(d=>{d.sx=Math.random();d.sy=Math.random()});
+  const t0=performance.now()+500;ht=0;hdraw();
+  const tick=n=>{ht=Math.min(1,Math.max(0,(n-t0)/2200));hdraw();if(ht<1)hraf=requestAnimationFrame(tick)};
+  hraf=requestAnimationFrame(tick);
+}
+hlayout();hdraw();REPAINT.push(()=>{hlayout();hdraw()});
+$('#shuffle').onclick=hplay;
+
+/* ---------- QuimicAI ---------- */
+// nome pt, nome en, fórmula, CID PubChem, massa teórica, massa medida (fictícia), altura do pico (fictícia)
+const Q=[['cafeína','caffeine','C8H10N4O2',2519,194.0804,194.0806,.62],['bisfenol A','bisphenol A','C15H16O2',6623,228.1150,228.1147,.9],['sulfametoxazol','sulfamethoxazole','C10H11N3O3S',5329,253.0521,253.0524,.45],['diclofenaco','diclofenac','C14H11Cl2NO2',3033,295.0167,295.0209,.75],['PFOA','PFOA','C8HF15O2',9554,413.9737,413.9729,.55]];
+const QS={en:[1,1,1,1,1],val:1,sel:3};
+const ppm=c=>(c[5]-c[4])/c[4]*1e6,qbad=c=>Math.abs(ppm(c))>5,qname=c=>E(c[0],c[1]);
+const NZ=[...Array(46)].map((_,i)=>[183+i*5.3+(i*37%11)/3,2+(i*53%9)]);
+function qspec(){
+  const W=$('#spec').clientWidth||600,x=m=>36+(m-180)/250*(W-64),y=h=>190-h*140,wide=W>=520;
+  let o=`<line class="ax" x1="20" x2="${W-12}" y1="190" y2="190"/>`;
+  [200,250,300,350,400].forEach(m=>o+=`<line class="ax" x1="${x(m)}" x2="${x(m)}" y1="190" y2="195"/><text class="tk" x="${x(m)}" y="209" text-anchor="middle">${m}</text>`);
+  NZ.forEach(n=>o+=`<line class="nz" x1="${x(n[0])}" x2="${x(n[0])}" y1="190" y2="${190-n[1]}"/>`);
+  o+=`<text class="tk" x="${W-12}" y="226" text-anchor="end">${E('massa monoisotópica (Da)','monoisotopic mass (Da)')}</text>`;
+  Q.forEach((c,i)=>{
+    const X=x(c[5]),Y=y(c[6]),en=QS.en[i],sel=QS.sel==i,bad=QS.val&&en&&qbad(c);
+    const lab=wide||sel?(en?qname(c):c[5].toFixed(4)):'';
+    o+=`<g class="pk${en?' en':''}${sel?' sel':''}${bad?' bad':''}" data-i="${i}"><line x1="${X}" x2="${X}" y1="190" y2="${Y}"/><circle cx="${X}" cy="${Y}" r="4.5"/><text x="${Math.min(Math.max(X,48),W-48)}" y="${Y-11}" text-anchor="middle">${lab}</text><rect x="${X-16}" y="${Y-26}" width="32" height="${216-Y}" fill="transparent"/></g>`;
+  });
+  if(QS.val&&wide){const c=Q[3],X=x(c[5]),Y=y(c[6]);o+=`<path class="arw" d="M${X+58} ${Y-38} q-28 2 -40 20"/><text class="hand" x="${X+64}" y="${Y-32}">${E('fora do limite','over the limit')}</text>`}
+  $('#spec').innerHTML=`<svg role="img" aria-label="${E('Espectro com cinco picos','Spectrum with five peaks')}">${o}</svg>`;
+  $$('#spec .pk').forEach(g=>g.onclick=()=>qsel(+g.dataset.i));
+}
+function qtable(){
+  $('#qt').innerHTML=Q.map((c,i)=>{const en=QS.en[i],p=ppm(c),bad=QS.val&&qbad(c);
+    return `<tr data-i="${i}" class="${QS.sel==i?'sel':''}"><td>${en?qname(c):E('candidato ','candidate ')+(i+1)}</td><td>${num(c[5],4)}</td>`+(en?`<td>${c[2]}</td><td>${c[3]}</td><td>${num(c[4],4)}</td><td>${p>0?'+':''}${num(p,1)}</td><td>${QS.val?`<span class="pill${bad?' hit':''}">${bad?E('revisar','review'):'ok'}</span>`:''}</td>`:'<td>·</td><td>·</td><td>·</td><td>·</td><td></td>')+'</tr>'}).join('');
+  $$('#qt tr').forEach(r=>r.onclick=()=>qsel(+r.dataset.i));
+}
+const qjson=c=>`GET pubchem/compound/name/${encodeURIComponent(c[1]=='PFOA'?'perfluorooctanoic acid':c[1])}/property\n200 OK\n{ "CID": ${c[3]},\n  "MolecularFormula": "${c[2]}",\n  "MonoisotopicMass": ${c[4]} }`;
+function qdraw(){qspec();qtable()}
+function qsel(i){if(!QS.en[i])return;QS.sel=i;qdraw();$('#qj').textContent=qjson(Q[i])}
+const QA=[
+  [()=>E('Quais compostos precisam de revisão?','Which compounds need review?'),()=>E(`Diclofenaco. A massa medida difere ${num(ppm(Q[3]),1)} ppm da teórica, acima do limite de 5 ppm usado nesta demonstração. Os outros quatro estão dentro do limite.`,`Diclofenac. The measured mass differs from the theoretical mass by ${num(ppm(Q[3]),1)} ppm, above the 5 ppm limit used in this demo. The other four are within the limit.`)],
+  [()=>E('O que é o PFOA nesta tabela?','What is PFOA in this table?'),()=>E('Um composto perfluorado (PFAS), consultado na PubChem pelo nome do candidato. A confirmação da identidade depende da análise do químico.','A perfluorinated compound (PFAS), looked up in PubChem by the candidate name. Confirming its identity depends on the chemist\'s analysis.')],
+  [()=>E('Você decide se o composto está certo?','Do you decide whether a compound is correct?'),()=>E('Não. Eu aponto inconsistências nos dados da tabela. A decisão e o registro ficam com o analista.','No. I point out inconsistencies in the table data. The decision and its record stay with the analyst.')],
+  [()=>E('De onde vêm as suas respostas?','Where do your answers come from?'),()=>E('Da tabela enriquecida. No sistema real, o contexto é fechado para o assistente não responder com conhecimento de fora.','From the enriched table. In the real system, the context is closed so the assistant doesn\'t answer from outside knowledge.')]];
+function qchips(){$('#qc').innerHTML=QA.map(a=>`<button class="chip" type="button" aria-pressed="false">${a[0]()}</button>`).join('');[...$('#qc').children].forEach((b,i)=>b.onclick=()=>qask(i))}
+function qask(i){[...$('#qc').children].forEach((b,n)=>b.setAttribute('aria-pressed',n==i));$('#qa').textContent=QA[i][1]()}
+bench('q',[['Importar','Import'],['Consultar APIs','Query APIs'],['Enriquecer','Enrich'],['Validar','Validate'],['Perguntar','Ask']],
+  ()=>{QS.en=[1,1,1,1,1];QS.val=1;QS.sel=3;qdraw();qchips();$('#qj').textContent=qjson(Q[3]);$$('.sources b').forEach(b=>b.classList.remove('on'));qask(0)},
+  async(w,step)=>{
+    const S=$$('.sources b');QS.en=[0,0,0,0,0];QS.val=0;QS.sel=-1;qdraw();qchips();$('#qa').textContent='';$('#qj').textContent='';
+    step(0,'Lendo a tabela exportada pelo instrumento','Reading the table exported by the instrument');await w(1100);
+    for(let i=0;i<Q.length;i++){
+      step(i?2:1,`Consultando o candidato ${i+1} de ${Q.length}`,`Looking up candidate ${i+1} of ${Q.length}`);
+      QS.sel=i;qdraw();const s=qjson(Q[i]);
+      for(let n=0;n<s.length;n+=6){S.forEach((b,k)=>b.classList.toggle('on',k==Math.floor(n/s.length*3)));$('#qj').textContent=s.slice(0,n+6);await w(16)}
+      QS.en[i]=1;qdraw();await w(420);
+    }
+    S.forEach(b=>b.classList.remove('on'));
+    step(3,'Comparando massa medida e teórica','Comparing measured and theoretical mass');await w(500);QS.val=1;QS.sel=3;qdraw();$('#qj').textContent=qjson(Q[3]);await w(1200);
+    step(4,'Assistente pronto','Assistant ready');[...$('#qc').children][0].setAttribute('aria-pressed',true);
+    const a=QA[0][1]();for(let n=0;n<a.length;n+=3){$('#qa').textContent=a.slice(0,n+3);await w(16)}await w(400);
+  });
+REPAINT.push(qspec);
+
+/* ---------- Frota de telefonia: dados sintéticos, k-means e leave-one-out reais ---------- */
+let seed=42;const R=()=>(seed=(seed*1664525+1013904223)%4294967296)/4294967296;
+const L=[...Array(82)].map((_,i)=>{const g=i<22?0:i<30?1:i<62?2:3,b=[0,.12,1.6,7][g]*(g?.5+R():1),v=[0,1.6,.25,.3][g];return[...Array(6)].map(()=>g==1?(R()<.3?R()*4:0):g==0?0:Math.max(0,b*(1+(R()-.5)*2*v)))});
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,sd=a=>{const m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)**2)))};
+const P=L.map((l,i)=>{const m=mean(l);return{i,l,x:Math.log10(m+.02),y:m?Math.min(sd(l)/m,2.4):0,max:Math.max(...l)}});
+let C=[P[0],P[25],P[40],P[75]].map(p=>[p.x,p.y/2]);
+for(let k=0;k<20;k++){P.forEach(p=>{p.c=C.map(c=>(p.x-c[0])**2+(p.y/2-c[1])**2).reduce((b,d,i,a)=>d<a[b]?i:b,0)});C=C.map((c,i)=>{const g=P.filter(p=>p.c==i);return g.length?[mean(g.map(p=>p.x)),mean(g.map(p=>p.y/2))]:c})}
+const ORD=[0,1,2,3].sort((a,b)=>C[a][0]-C[b][0]);P.forEach(p=>p.k=ORD.indexOf(p.c));
+const TN=[['sem uso','no usage'],['esporádico','sporadic'],['uso leve','light'],['uso intenso','heavy']],TC=['--muted','--d','--t','--q'];
+const PL=[[1,19.99],[3,29.99],[6,39.99],[10,44.99],[15,49.99],[20,54.99],[50,79.99]];
+const plan=g=>PL.findIndex(p=>p[0]>=g)<0?6:PL.findIndex(p=>p[0]>=g);
+const sx=p=>60+(p.x+1.7)/2.8*470,sy=p=>310-p.y/2.4*260,colx=k=>42+k*68;
+let TS=0;
+function tsim(m){let f=0,n=0,c=0;P.forEach(p=>{if(p.max>0)c+=PL[plan(p.max*m)][1];p.l.forEach((u,i)=>{const o=p.l.filter((_,j)=>j!=i);n++;if(u>PL[plan(Math.max(...o)*m)][0])f++})});return{c,f:f/n}}
+function tpos(){
+  const m=+$('#tm').value,cnt=Array(8).fill(0);
+  [...P].sort((a,b)=>a.k-b.k||a.max-b.max).forEach(p=>{
+    let X,Y;
+    if(TS==0){X=280+(p.i%14-6.5)*32;Y=110+Math.floor(p.i/14)*32}
+    else if(TS<3){X=sx(p);Y=sy(p)}
+    else{const k=p.max>0?plan(p.max*m)+1:0,j=cnt[k]++;X=colx(k)+(j%2-.5)*14;Y=316-Math.floor(j/2)*14}
+    p.el.style.transform=`translate(${X}px,${Y}px)`;
+  });
+}
+function tinit(){
+  let o='<g class="a1">';
+  [[.1,'0,1','0.1'],[1,'1','1'],[10,'10 GB','10 GB']].forEach(t=>{const X=60+(Math.log10(t[0])+1.7)/2.8*470;o+=`<line x1="${X}" x2="${X}" y1="40" y2="322"/><text class="tx" x="${X}" y="340" text-anchor="middle" data-pt="${t[1]}" data-en2="${t[2]}"></text>`});
+  o+=`<text class="tl" x="530" y="364" text-anchor="end" data-pt="consumo médio por mês (escala log)" data-en2="average monthly usage (log scale)"></text><text class="tl" x="14" y="24" data-pt="variação de um mês para o outro" data-en2="month-to-month variation"></text></g><g class="a2">`;
+  TN.forEach((n,k)=>{const g=P.filter(p=>p.k==k),X=k?mean(g.map(sx)):70,Y=Math.max(30,Math.min(...g.map(sy))-16);o+=`<text x="${k?X:74}" y="${k?Y:284}" text-anchor="${k?'middle':'start'}" style="fill:var(${TC[k]})" data-pt="${n[0]} (${g.length})" data-en2="${n[1]} (${g.length})"></text>`});
+  o+='</g><g class="a3"><line x1="14" x2="546" y1="330" y2="330"/>';
+  for(let k=0;k<8;k++)o+=`<text x="${colx(k)}" y="348" text-anchor="middle" ${k?'':'data-pt="sem uso" data-en2="no usage"'}>${k?PL[k-1][0]+' GB':''}</text>`+(k?`<text class="pr" x="${colx(k)}" y="364" text-anchor="middle" data-v="${PL[k-1][1]}"></text>`:'');
+  o+='</g>';
+  $('#tsvg').innerHTML=o+P.map(p=>`<circle r="5.2" class="k${p.k}" style="transition-delay:${p.i*5}ms"/>`).join('');
+  const cs=$$('#tsvg circle');P.forEach((p,i)=>p.el=cs[i]);
+}
+const TCAP=[['82 pontos, um para cada linha.','82 dots, one for each line.'],['Cada ponto foi para o lugar que o consumo dele indica.','Each dot moved to where its usage puts it.'],['As cores mostram os grupos encontrados pelo k-means.','Colors show the groups found by k-means.']];
+const TTAB=[['Fatura','Bill'],['Uso','Usage'],['Perfis','Profiles'],['Planos','Plans']];
+function ttext(){
+  $$('#tsvg [data-pt]').forEach(t=>t.textContent=E(t.dataset.pt,t.dataset.en2));
+  $$('#tsvg .pr').forEach(t=>t.textContent='R$ '+num(+t.dataset.v,0));
+  $('#ttabs').innerHTML=TTAB.map((t,i)=>`<button type="button" aria-pressed="${i==TS}">${i+1}. ${E(...t)}</button>`).join('');
+  [...$('#ttabs').children].forEach((b,i)=>b.onclick=()=>tset(i));
+  $('#tcap').textContent=TS<3?E(...TCAP[TS]):'';$('#tcap').hidden=TS==3;$('#tsim').hidden=TS!=3;
+  const m=+$('#tm').value,r=tsim(m);
+  $('#tv').textContent=num(m,1)+'×';$('#tcost').textContent='R$ '+num(r.c,0);$('#tfail').textContent=num(r.f*100,1)+'%';$('#tdead').textContent=P.filter(p=>!p.max).length;
+}
+function tset(s){TS=s;$('#tsvg').setAttribute('class','s'+s);$$('.step').forEach(e=>e.classList.toggle('on',+e.dataset.s==s));tpos();ttext()}
+tinit();tset(0);RENDER.push(ttext);
+$('#tm').oninput=()=>{tpos();ttext()};
+$$('.step').forEach(e=>e.onclick=()=>tset(+e.dataset.s));
+let tlast=0,tq=0;
+addEventListener('scroll',()=>{if(tq)return;tq=requestAnimationFrame(()=>{tq=0;
+  const line=innerHeight*(innerWidth<=860?.8:.6);let s=0;$$('.step').forEach(e=>{if(e.getBoundingClientRect().top<line)s=+e.dataset.s});
+  if(s!=tlast){tlast=s;tset(s)}})},{passive:true});
+
+/* ---------- Diário Oficial: filtro real sobre publicações fictícias ---------- */
+const DT=[['educação','education',1],['credenciamento','accreditation',1],['entidades beneficentes','charitable entities',1],['saúde','health',0]];
+const DD=[
+ ['Seg','Mon',[[1,'Resolução sobre normas de trânsito aéreo','Resolution on air traffic rules'],[3,'Extrato de contrato de manutenção predial','Building maintenance contract summary'],[1,'Portaria sobre vigilância em saúde animal','Ordinance on animal health surveillance']]],
+ ['Ter','Tue',[[1,'Portaria sobre credenciamento de instituição de educação superior','Ordinance on accreditation of a higher education institution'],[1,'Instrução normativa sobre exportação agrícola','Normative instruction on agricultural exports'],[2,'Designação de servidor em órgão regional','Assignment of a civil servant to a regional office']]],
+ ['Qua','Wed',[[3,'Edital de licitação para obras rodoviárias','Call for bids on road works'],[1,'Resolução sobre tarifas de energia','Resolution on energy tariffs'],[3,'Aviso de consulta pública sobre telecomunicações','Notice of public consultation on telecommunications']]],
+ ['Qui','Thu',[[1,'Portaria sobre certificação de entidades beneficentes','Ordinance on certification of charitable entities'],[1,'Portaria sobre diretrizes da educação básica','Ordinance on basic education guidelines'],[3,'Extrato de convênio de pesquisa','Research agreement summary']]],
+ ['Sex','Fri',[[1,'Resolução sobre registro de produtos para a saúde','Resolution on registration of health products'],[3,'Retificação de edital de concurso','Correction to a public exam notice'],[1,'Portaria sobre calendário de feriados','Ordinance on the holiday calendar']]]];
+const DS={sel:3,days:5,prog:3};let dbench;
+const dterms=()=>DT.filter(t=>t[2]).map(t=>E(t[0],t[1]));
+const dtitle=p=>E(p[1],p[2]),dhit=p=>dterms().some(t=>dtitle(p).toLowerCase().includes(t));
+const dmark=p=>dterms().reduce((s,t)=>s.replace(new RegExp(t,'i'),m=>`<mark>${m}</mark>`),dtitle(p));
+function ddraw(){
+  $('#dterms').innerHTML=`<span>${E('Termos monitorados:','Monitored terms:')}</span>`+DT.map(t=>`<button class="chip" type="button" aria-pressed="${!!t[2]}">${E(t[0],t[1])}</button>`).join('');
+  $$('#dterms button').forEach((b,i)=>b.onclick=()=>{DT[i][2]^=1;dbench.rest()});
+  $('#dweek').innerHTML=DD.map((d,i)=>{const n=d[2].filter(dhit).length,done=i<DS.days;return `<button type="button" aria-pressed="${i==DS.sel}"><span>${E(d[0],d[1])}</span><i class="${done&&n?'hit':''}">${done?(n?n+' '+E(n>1?'alertas':'alerta',n>1?'alerts':'alert'):E('nada','none')):'·'}</i></button>`}).join('');
+  $$('#dweek button').forEach((b,i)=>b.onclick=()=>{if(i<DS.days){DS.sel=i;DS.prog=3;ddraw()}});
+  const day=DD[DS.sel][2],scanned=DS.sel<DS.days?3:DS.prog;
+  $('#dlist').innerHTML=day.map((p,i)=>{const s=i<scanned,h=s&&dhit(p);return `<div class="pub ${s?(h?'hit':'miss'):''}"><code>${E('Seção','Section')} ${p[0]}</code><span>${s?dmark(p):dtitle(p)}</span>${s?`<span class="pill${h?' hit':''}">${h?E('alerta','alert'):E('ignorada','skipped')}</span>`:'<span></span>'}</div>`}).join('');
+  const hits=day.filter(dhit),a=$('#dalert');
+  if(DS.sel>=DS.days)a.innerHTML=`<strong>${E('Aguardando a execução do dia','Waiting for today\'s run')}</strong>`;
+  else if(hits.length)a.innerHTML=`<strong>${E('Alerta enviado à equipe','Alert sent to the team')}</strong><span>${hits.length} ${E(hits.length>1?'publicações de interesse hoje:':'publicação de interesse hoje:',hits.length>1?'relevant publications today:':'relevant publication today:')}</span><ul>${hits.map(p=>`<li>${dtitle(p)}</li>`).join('')}</ul>`;
+  else a.innerHTML=`<strong>${E('Nenhum alerta hoje','No alert today')}</strong><span class="hand">${E('dia sem alerta também é informação','a quiet day is information too')}</span>`;
+}
+dbench=bench('d',[['Agendar','Schedule'],['Coletar','Collect'],['Filtrar','Filter'],['Avisar','Alert']],
+  ()=>{DS.days=5;DS.prog=3;if(DS.sel>4)DS.sel=3;ddraw()},
+  async(w,step)=>{
+    for(let d=0;d<5;d++){
+      DS.sel=d;DS.days=d;DS.prog=0;ddraw();
+      step(0,`${DD[d][0]}: execução diária iniciada`,`${DD[d][1]}: daily run started`);await w(450);
+      step(1,'Coletando as publicações do dia','Collecting today\'s publications');await w(450);
+      for(let i=1;i<=3;i++){step(2,'Comparando com os termos monitorados','Matching against monitored terms');DS.prog=i;ddraw();await w(330)}
+      DS.days=d+1;ddraw();const n=DD[d][2].filter(dhit).length;
+      step(3,n?'Alerta enviado':'Nada a avisar hoje',n?'Alert sent':'Nothing to report today');await w(900);
+    }
+    DS.sel=3;
+  });
+
+/* ---------- Renomeador ---------- */
+const rcode=id=>(Number(id)*2654435761%1679616).toString(36).toUpperCase().padStart(4,'0');
+const RF=['10482','10517','10633','10702','10791'],RP={id:RF[4],at:4,n:1500,name:''};
+const rg=$('#rgrid'),rx=rg.getContext('2d');
+function rgrid(){
+  const W=rg.parentElement.clientWidth-40,p=W>=700?12:8,cols=Math.floor(W/p),rows=Math.ceil(1500/cols),dpr=window.devicePixelRatio||1,H=rows*p;
+  rg.style.height=H+'px';rg.width=W*dpr;rg.height=H*dpr;rx.setTransform(dpr,0,0,dpr,0,0);rx.clearRect(0,0,W,H);
+  const on=css('--r'),off=css('--line');
+  for(let i=0;i<1500;i++){rx.fillStyle=i<RP.n?on:off;rx.fillRect(i%cols*p,Math.floor(i/cols)*p,p-2,p-2)}
+}
+function rdraw(){
+  const c=rcode(RP.id),v=[RP.id+'.jpg',RP.at>=1?'id '+RP.id:'',RP.at>=2?c:'',RP.at>=3?(RP.name||c+'.jpg'):''];
+  const lab=[['arquivo','file'],['busca no sistema','system search'],['código encontrado','code found'],['novo nome','new name']];
+  $('#rpipe').innerHTML=lab.map((l,i)=>`<div class="${i==RP.at?'on':''}"><span>${E(...l)}</span><b>${v[i]}</b></div>`).join('');
+  $('#rc').textContent=num(RP.n);rgrid();
+}
+bench('r',[['Ler arquivo','Read file'],['Buscar usuário','Find user'],['Obter código','Get code'],['Renomear','Rename'],['Registrar','Log']],
+  ()=>{RP.id=RF[4];RP.at=4;RP.n=1500;RP.name='';rdraw()},
+  async(w,step)=>{
+    RP.n=0;const abc='ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
+    for(let i=0;i<RF.length;i++){
+      RP.id=RF[i];RP.name='';RP.at=0;rdraw();step(0,'Lendo o número no nome do arquivo','Reading the number in the file name');await w(300);
+      RP.at=1;rdraw();step(1,'Buscando a pessoa no sistema web','Searching for the person in the web system');await w(300);
+      RP.at=2;rdraw();step(2,'Código encontrado','Code found');await w(300);
+      RP.at=3;step(3,'Renomeando o arquivo','Renaming the file');
+      for(let k=0;k<7;k++){RP.name=[...rcode(RF[i])].map((ch,j)=>j<k-2?ch:abc[Math.floor(Math.random()*34)]).join('')+'.jpg';rdraw();await w(55)}
+      RP.name='';RP.n=i+1;rdraw();step(4,'Linha gravada no log','Line written to the log');await w(260);
+    }
+    step(3,'Repetindo para o restante do lote','Repeating for the rest of the batch');RP.at=4;
+    for(let n=5;n<1500;n+=Math.ceil(n/6)){RP.n=n;rdraw();await w(60)}
+  });
+REPAINT.push(rgrid);
+$('#rform').onsubmit=e=>{e.preventDefault();const id=$('#rid').value.replace(/\D/g,'');
+  $('#rout').textContent=id?`${id}.jpg → ${rcode(id)}.jpg`:E('Digite só números.','Enter digits only.')};
+
+/* ---------- Idioma, tema e largura ---------- */
+function setLang(l){
+  lang=l;try{localStorage.setItem('lang',l)}catch(e){}
+  document.documentElement.lang=l=='en'?'en':'pt-BR';
+  $$('[data-en]').forEach(el=>{if(el._pt==null)el._pt=el.innerHTML;el.innerHTML=l=='en'?el.dataset.en:el._pt});
+  $('#n1500').textContent=num(1500);
+  $$('[data-en-alt]').forEach(el=>{if(el._alt==null)el._alt=el.alt;el.alt=l=='en'?el.dataset.enAlt:el._alt});
+  $('#lang').textContent=l=='en'?'PT':'EN';$('#lang').setAttribute('aria-label',l=='en'?'Ver em português':'View in English');
+  RENDER.forEach(f=>f());
+}
+$('#lang').onclick=()=>setLang(lang=='en'?'pt':'en');setLang(lang);
+const repaint=()=>REPAINT.forEach(f=>f());
+let rz=0;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(repaint,150)});
+matchMedia('(prefers-color-scheme:dark)').addEventListener('change',repaint);
+new MutationObserver(repaint).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(repaint);
+hplay();
+</script>
+</body></html>
